@@ -11,9 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { Notification } from "@/lib/types";
 import { NotificationList } from "@/components/NotificationList";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { AppDispatch, RootState } from "@/store";
 import { logout } from "@/app/actions/auth";
-import { signOut } from "@/store/slices/authSlice";
+import { checkCookie, signOut } from "@/store/slices/authSlice";
 import { deleteAllNotifications, deleteNotificationById, fetchNotifications, markNotificationAsRead } from "@/app/actions/notification";
 import { toast } from "sonner";
 
@@ -26,7 +26,7 @@ export function Header() {
 
     const { userId } = useSelector((state: RootState) => state.auth);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const getNotifications = async () => {
         if (!userId) return;
@@ -35,6 +35,10 @@ export function Header() {
             setNotifications(data);
         }
     }
+
+    useEffect(() => {
+        dispatch(checkCookie());
+    }, [dispatch]);
 
     useEffect(() => {
         getNotifications();

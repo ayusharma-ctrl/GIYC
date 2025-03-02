@@ -67,8 +67,8 @@ Guess destinations based on cryptic clues and AI-generated images. Earn streaks,
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/yourusername/globetrotter-challenge.git
-cd globetrotter-challenge
+git clone https://github.com/ayusharma-ctrl/GIYC.git
+cd GIYC
 ```
 
 ### 2. Install Dependencies

@@ -281,7 +281,7 @@ export default function ProfilePage() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
-                                        {userData?.Invite.map((invite) => (
+                                        {userData?.Invite.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).map((invite) => (
                                             <div
                                                 key={invite.id}
                                                 className="flex items-center justify-between p-4 rounded-lg border"
