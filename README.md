@@ -76,7 +76,7 @@ cd GIYC
 npm install
 ```
 
-### 3. Follow .env.sample file
+### 3. Follow sample.env file and create a new '.env' file in the root directory.
 
 ### 4. Start Server
 ```bash
