@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String            @id @default(uuid())
+  username      String            @unique
+  password      String
+  totalCorrect  Int               @default(0)
+  totalWrong    Int               @default(0)
+  totalPlayed   Int               @default(0)
+  currentStreak Int               @default(0)
+  longestStreak Int               @default(0)
+  lastPlayedAt  DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  avatar        String
+  games         Game[]
+  Invite        Invite[]
+  notifications Notification[]
+  achievements  UserAchievement[]
+  sentInvites   Invite[]          @relation("SentInvites")
+}
+
+model UserAchievement {
+  userId        String
+  achievementId Int
+  completedOn   DateTime    @default(now())
+  createdAt     DateTime    @default(now())
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+
+  @@id([userId, achievementId])
+}
+
+model Achievement {
+  id          Int               @id @default(autoincrement())
+  title       String
+  description String
+  icon        String
+  createdAt   DateTime          @default(now())
+  users       UserAchievement[]
+}
+
+model Invite {
+  id          Int      @id @default(autoincrement())
+  invitedById String
+  invitee     String
+  isAccepted  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  invitedBy   User     @relation(fields: [invitedById], references: [id])
+  User        User[]   @relation("SentInvites")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  icon      String?  @default("🏆")
+  isRead    Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Game {
+  id            Int         @id @default(autoincrement())
+  userId        String
+  destinationId Int
+  isCorrect     Boolean
+  createdAt     DateTime    @default(now())
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+}
+
+model Destination {
+  id        Int      @id @default(autoincrement())
+  city      String
+  country   String
+  clues     String[]
+  fun_facts String[]
+  trivia    String[]
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  games     Game[]
+}
